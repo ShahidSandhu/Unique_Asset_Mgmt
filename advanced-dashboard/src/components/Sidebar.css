@@ -1,0 +1,23 @@
+/* src/components/Sidebar.css */
+.sidebar {
+  height: 100vh;
+  padding: 20px;
+  background-color: #343a40;
+}
+
+.sidebar-link {
+  color: #ddd;
+  font-weight: bold;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-link:hover {
+  color: #007bff;
+}
+
+.sidebar-link .icon {
+  margin-right: 10px;
+}

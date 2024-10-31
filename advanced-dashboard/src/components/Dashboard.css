@@ -1,0 +1,17 @@
+/* src/components/Dashboard.css */
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.dashboard-content {
+  display: flex;
+  width: 100%;
+}
+
+.dashboard-main {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #f9fafb;
+}

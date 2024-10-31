@@ -1,0 +1,13 @@
+src/
+├── components/
+│   ├── Dashboard.js         // Main layout of the dashboard
+│   ├── Sidebar.js           // Sidebar navigation
+│   ├── NavbarComponent.js   // Top navigation bar
+│   ├── DashboardHome.js     // Default dashboard home view with stats
+│   ├── ChartCard.js         // Card component with a chart
+│   ├── DataCard.js          // Card component for showing metrics
+├── pages/
+│   ├── Assets.js            // Page for managing assets
+│   ├── Employees.js         // Page for managing employees
+├── App.js                   // Main app with routing
+└── index.js                 // Entry point

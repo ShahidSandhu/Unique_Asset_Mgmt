@@ -1,0 +1,28 @@
+/* src/components/DataCard.css */
+.data-card {
+  border: none;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.data-card:hover {
+  transform: translateY(-4px); /* Hover effect */
+}
+
+.data-card-icon {
+  font-size: 2rem;
+  color: #007bff;
+}
+
+.data-card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.data-card-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #007bff;
+}

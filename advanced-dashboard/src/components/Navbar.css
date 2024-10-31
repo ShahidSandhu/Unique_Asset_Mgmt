@@ -1,0 +1,18 @@
+/* src/components/Navbar.css */
+.navbar {
+  padding: 10px 20px;
+}
+
+.navbar-brand {
+  font-size: 1.5em;
+}
+
+.navbar-icons {
+  margin-left: auto;
+}
+
+.profile-dropdown-toggle {
+  background: transparent;
+  border: none;
+  color: white;
+}
