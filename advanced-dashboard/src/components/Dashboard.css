@@ -15,3 +15,16 @@
   padding: 20px;
   background-color: #f9fafb;
 }
+
+
+
+/* src/components/Dashboard.css */
+body.light-theme {
+  background-color: #f9fafb;
+  color: #333;
+}
+
+body.dark-theme {
+  background-color: #333;
+  color: #f9fafb;
+}

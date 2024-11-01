@@ -1,16 +1,27 @@
 // src/components/ChartCard.js
 import React from "react";
+import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from "react-chartjs-2";
 
-function ChartCard({ data, title }) {
-  return (
-    <div className="card mb-3">
-      <div className="card-header">{title}</div>
-      <div className="card-body">
-        <Bar data={data} />
-      </div>
-    </div>
-  );
+
+
+
+// Register the scale
+Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
+
+function ChartCard() {
+  const data = {
+    labels: ["January", "February", "March", "April"],
+    datasets: [
+      {
+        label: "Sales",
+        data: [10, 20, 30, 40],
+      },
+    ],
+  };
+
+  return <Bar data={data} />;
 }
 
 export default ChartCard;
