@@ -1,11 +1,26 @@
 /* src/components/Sidebar.css */
+
 .sidebar {
-  height: calc(100vh - 60px); /* Adjust based on navbar height */
   width: 250px;
-  padding: 20px;
-  background-color: #343a40;
+  height: calc(100vh - 60px); /* Account for navbar height */
   position: fixed;
-  top: 60px; /* Adjust based on navbar height */
+  top: 60px; /* Adjusted for fixed navbar */
+  left: 0;
+  background-color: #343a40;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.sidebar-title {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.sidebar-links {
+  flex-grow: 1;
 }
 
 .sidebar-link {
@@ -15,12 +30,42 @@
   margin-bottom: 10px;
   display: flex;
   align-items: center;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
-.sidebar-link:hover {
+.sidebar-link.active, .sidebar-link:hover {
   color: #007bff;
 }
 
 .sidebar-link .icon {
+  margin-right: 10px;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid #444;
+}
+
+.theme-toggle-button {
+  width: 100%;
+  background: none;
+  border: none;
+  color: #ddd;
+  font-size: 1em;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px 0;
+  transition: color 0.3s ease;
+}
+
+.theme-toggle-button:hover {
+  color: #007bff;
+}
+
+.theme-toggle-button .icon {
   margin-right: 10px;
 }
