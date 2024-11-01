@@ -7,18 +7,22 @@ import "./Navbar.css";
 import { DashboardContext } from "../context/DashboardContext";
 
 function NavbarComponent() {
-  // Check if DashboardContext is available, otherwise, provide fallback values
   const dashboardContext = useContext(DashboardContext);
-  const theme = dashboardContext?.theme || "light"; // Defaults to "light"
-  const toggleTheme = dashboardContext?.toggleTheme || (() => {}); // No-op function if undefined
+  const theme = dashboardContext?.theme || "light";
+  const toggleTheme = dashboardContext?.toggleTheme || (() => {});
 
   return (
-    <Navbar bg="primary" variant="dark" expand="lg" className="navbar">
+    <Navbar
+      bg="primary"
+      variant="dark"
+      expand="lg"
+      className="navbar fixed-top"
+    >
       <Navbar.Brand href="/" className="navbar-brand">
         Asset Management System
       </Navbar.Brand>
       <Nav className="ml-auto navbar-icons">
-        <Dropdown>
+        <Dropdown align="end">
           <Dropdown.Toggle
             variant="primary"
             id="dropdown-basic"
@@ -26,17 +30,13 @@ function NavbarComponent() {
           >
             <FaUserCircle size={24} />
           </Dropdown.Toggle>
-          <Dropdown.Menu align="end">
+          <Dropdown.Menu>
             <Dropdown.Item href="/profile">Profile</Dropdown.Item>
             <Dropdown.Item href="/settings">Settings</Dropdown.Item>
             <Dropdown.Item href="/logout">Logout</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <Button
-          onClick={toggleTheme}
-          variant="outline-light"
-          className="ml-auto"
-        >
+        <Button onClick={toggleTheme} variant="outline-light" className="ml-3">
           Toggle {theme === "light" ? "Dark" : "Light"} Mode
         </Button>
       </Nav>

@@ -1,7 +1,7 @@
 // src/components/DashboardHome.js
 import React from "react";
-import ChartCard from "./ChartCard";
 import DataCard from "./DataCard";
+import ChartCard from "./ChartCard"; // Assume this component renders a chart
 
 function DashboardHome() {
   const sampleData = {
@@ -16,20 +16,14 @@ function DashboardHome() {
   };
 
   return (
-    <div>
-      <h2>Dashboard</h2>
-      <div className="row">
-        <div className="col-md-6">
-          <DataCard title="Total Assets" value="120" />
-        </div>
-        <div className="col-md-6">
-          <DataCard title="Total Employees" value="45" />
-        </div>
+    <div className="dashboard-home">
+      <h2>Dashboard Overview</h2>
+      <div className="data-cards">
+        <DataCard title="Total Assets" value="120" />
+        <DataCard title="Total Employees" value="45" />
       </div>
-      <div className="row">
-        <div className="col-md-12">
-          <ChartCard data={sampleData} title="Monthly Revenue" />
-        </div>
+      <div className="chart-section">
+        <ChartCard data={sampleData} title="Monthly Revenue" />
       </div>
     </div>
   );

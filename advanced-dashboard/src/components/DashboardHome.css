@@ -1,0 +1,14 @@
+/* src/components/DashboardHome.css */
+.dashboard-home {
+  padding: 20px;
+}
+
+.data-cards {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.chart-section {
+  margin-top: 20px;
+}

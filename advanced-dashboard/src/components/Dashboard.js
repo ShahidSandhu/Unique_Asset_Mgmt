@@ -8,11 +8,11 @@ import "./Dashboard.css";
 function Dashboard() {
   return (
     <div className="dashboard-container">
-      <NavbarComponent />
-      <div className="dashboard-content">
-        <Sidebar />
+      <NavbarComponent /> {/* Navbar at the top */}
+      <div className="dashboard-body">
+        <Sidebar /> {/* Sidebar on the left */}
         <main className="dashboard-main">
-          <Outlet /> {/* Renders child routes here */}
+          <Outlet /> {/* Main content */}
         </main>
       </div>
     </div>

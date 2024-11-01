@@ -15,8 +15,8 @@ function Assets() {
   ];
 
   return (
-    <div>
-      <h1>Assets</h1>
+    <div className="assets-page">
+      <h2>Assets</h2>
       <DataTable columns={columns} data={assets} />
     </div>
   );

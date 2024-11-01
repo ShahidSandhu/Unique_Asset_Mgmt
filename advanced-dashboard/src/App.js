@@ -6,7 +6,7 @@ import DashboardHome from "./components/DashboardHome";
 import Assets from "./pages/Assets";
 import Employees from "./pages/Employees";
 import AppProviders from "./context/Providers";
-import ErrorBoundary from "./components/ErrorBoundary"; // New Error Boundary component
+import ErrorBoundary from "./components/ErrorBoundary";
 
 function App() {
   return (
@@ -15,9 +15,10 @@ function App() {
         <ErrorBoundary>
           <Routes>
             <Route path="/" element={<Dashboard />}>
-              <Route index element={<DashboardHome />} />
-              <Route path="assets" element={<Assets />} />
-              <Route path="employees" element={<Employees />} />
+              <Route index element={<DashboardHome />} /> {/* Home dashboard */}
+              <Route path="assets" element={<Assets />} /> {/* Assets page */}
+              <Route path="employees" element={<Employees />} />{" "}
+              {/* Employees page */}
             </Route>
           </Routes>
         </ErrorBoundary>
