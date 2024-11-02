@@ -7,7 +7,7 @@ function Assets() {
   const { assets } = useContext(DashboardContext);
 
   const columns = [
-    { Header: "ID", accessor: "id" },
+    // { Header: "ID", accessor: "id" },
     { Header: "Name", accessor: "name" },
     { Header: "Value", accessor: "value" },
     { Header: "Serial Number", accessor: "serial_number" },

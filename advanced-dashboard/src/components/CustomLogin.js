@@ -1,7 +1,8 @@
 // src/components/CustomLogin.js
 import React, { useState, useContext } from "react";
-import api from "../axiosConfig";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import api from "../axiosConfig";
 import { AuthContext } from "./context/AuthContext";
 
 function CustomLogin() {

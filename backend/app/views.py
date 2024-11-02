@@ -76,7 +76,6 @@ class CustomLoginView(APIView):
                 "id": user.id,
                 "name": f"{user.first_name} {user.last_name}",
                 "roles": roles,  # Pass the retrieved group names
-                "email": user.email,
             }
         }, status=status.HTTP_200_OK)
 

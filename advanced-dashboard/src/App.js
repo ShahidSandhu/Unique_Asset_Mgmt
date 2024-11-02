@@ -1,12 +1,19 @@
 // src/App.js
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import DashboardHome from "./components/DashboardHome";
 import Assets from "./pages/Assets";
 import Employees from "./pages/Employees";
 import AppProviders from "./context/Providers";
 import ErrorBoundary from "./components/ErrorBoundary";
+import PrivateRoute from "./components/PrivateRoute"; // Authentication guard
+import Login from "./components/Login";
 
 function App() {
   return (
@@ -14,12 +21,26 @@ function App() {
       <Router>
         <ErrorBoundary>
           <Routes>
-            <Route path="/" element={<Dashboard />}>
-              <Route index element={<DashboardHome />} /> {/* Home dashboard */}
-              <Route path="assets" element={<Assets />} /> {/* Assets page */}
-              <Route path="employees" element={<Employees />} />{" "}
-              {/* Employees page */}
+            {/* Public Route for Login */}
+            <Route path="/login" element={<Login />} />
+
+            {/* Protected Routes under Dashboard */}
+            <Route
+              path="/dashboard/*"
+              element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            >
+              {/* Nested Dashboard Routes */}
+              <Route index element={<DashboardHome />} /> {/* Dashboard home */}
+              <Route path="assets" element={<Assets />} />
+              <Route path="employees" element={<Employees />} />
             </Route>
+
+            {/* Default Redirect */}
+            <Route path="*" element={<Navigate to="/dashboard" />} />
           </Routes>
         </ErrorBoundary>
       </Router>

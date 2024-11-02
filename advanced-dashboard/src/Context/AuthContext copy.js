@@ -1,29 +1,25 @@
 // src/context/AuthContext.js
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import api from "../axiosConfig";
 
 // Define default values for the AuthContext to prevent null errors if the provider is missing
 export const AuthContext = createContext({
   isAuthenticated: false,
-  login: () => {},
-  logout: () => {},
   user: null,
   token: null,
+  login: () => {},
+  logout: () => {},
   register: () => {},
   setToken: () => {},
 });
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  const login = () => setIsAuthenticated(true);
-  const logout = () => setIsAuthenticated(false);
-
+  
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
 
-  /*
   // Login function to handle authentication logic and update state
   const login = async (email, password) => {
     try {
@@ -38,22 +34,12 @@ export const AuthProvider = ({ children }) => {
       console.error("Login failed:", error);
       setIsAuthenticated(false);
     }
-  };*/
+  };
 
-  /*
-  // Logout function to clear user session and remove token from storage
-  const logout = () => {
-    setIsAuthenticated(false);
-    setToken(null);
-    setUser(null);
-    localStorage.removeItem("token");
-    delete axios.defaults.headers.common["Authorization"];
-  };*/
-  
   // Registration function to handle user registration and update state
   const register = async (email, password) => {
     try {
-      const response = await api.post("/api/register/", { email, password });
+      const response = await api.post("/api/register", { email, password });
       const { token, user } = response.data;
       setToken(token);
       setUser(user);
@@ -70,7 +56,7 @@ export const AuthProvider = ({ children }) => {
   const checkToken = async () => {
     if (token) {
       try {
-        const response = await api.get("/api/validate-token/", {
+        const response = await api.get("/api/validate-token", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.status === 200) {
@@ -86,20 +72,27 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Automatically validate token on initial load if it exists
-  /*
   useEffect(() => {
     checkToken();
   }, [token]);
-  */
+
+  // Logout function to clear user session and remove token from storage
+  const logout = () => {
+    setIsAuthenticated(false);
+    setToken(null);
+    setUser(null);
+    localStorage.removeItem("token");
+    delete axios.defaults.headers.common["Authorization"];
+  };
 
   return (
     <AuthContext.Provider
       value={{
         isAuthenticated,
-        login,
-        logout,
         user,
         token,
+        login,
+        logout,
         register,
         setToken,
       }}
@@ -109,8 +102,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// export default AuthProvider;
-
-export function useAuth() {
-  return useContext(AuthContext);
-}
+export default AuthProvider;

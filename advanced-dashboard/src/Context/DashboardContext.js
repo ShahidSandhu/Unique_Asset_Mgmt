@@ -21,11 +21,12 @@ export function DashboardProvider({ children }) {
     document.body.className = theme === "light" ? "light-theme" : "dark-theme";
   }, [theme]);
 
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const assetsResponse = await api.get("/api/assets");
-        const employeesResponse = await api.get("/api/employees");
+        const assetsResponse = await api.get("/api/assets/");
+        const employeesResponse = await api.get("/api/employees/");
         setAssets(assetsResponse.data);
         setEmployees(employeesResponse.data);
         toast.success("Data fetched successfully!");
@@ -39,6 +40,7 @@ export function DashboardProvider({ children }) {
     const interval = setInterval(fetchData, 10000);
     return () => clearInterval(interval);
   }, []);
+  
 
   return (
     <DashboardContext.Provider
