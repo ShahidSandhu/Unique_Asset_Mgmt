@@ -1,22 +1,26 @@
 /* src/components/Navbar.css */
+/* Navbar.css */
 .navbar {
   width: 100%;
   padding: 10px 20px;
   position: fixed;
   top: 0;
-  z-index: 1000;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
 }
 
+/* Adjust positioning for the toggle button */
+.navbar-toggle {
+  margin-right: 10px; /* Space between toggle button and brand */
+}
+
+/* Optional: Add spacing for the brand */
 .navbar-brand {
   font-size: 1.5em;
 }
 
 .navbar-icons {
-  margin-left: auto;
+  align-items: center;
 }
 
-.profile-dropdown-toggle {
-  background: transparent;
-  border: none;
-  color: white;
-}

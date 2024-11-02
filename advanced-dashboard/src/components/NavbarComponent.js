@@ -1,11 +1,15 @@
-// src/components/NavbarComponent.js
-import React from "react";
+import React, { useContext } from "react";
 import { Navbar, Nav, Dropdown, Button } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
 import "./Navbar.css";
+import { DashboardContext } from "../context/DashboardContext"; // Import the context
 
 function NavbarComponent({ toggleSidebar }) {
+  const dashboardContext = useContext(DashboardContext);
+  const theme = dashboardContext?.theme || "light";
+  const toggleTheme = dashboardContext?.toggleTheme || (() => {});
+
   return (
     <Navbar
       bg="primary"
@@ -13,17 +17,22 @@ function NavbarComponent({ toggleSidebar }) {
       expand="lg"
       className="navbar fixed-top"
     >
+      {/* Sidebar Toggle Button on the Left */}
+      <Button
+        onClick={toggleSidebar}
+        variant="outline-light"
+        className="mr-3 navbar-toggle"
+      >
+        <FiMenu size={20} />
+      </Button>
+
+      {/* Navbar Brand */}
       <Navbar.Brand href="/" className="navbar-brand">
         Asset Management System
       </Navbar.Brand>
-      <Nav className="ml-auto navbar-icons">
-        <Button
-          onClick={toggleSidebar}
-          variant="outline-light"
-          className="mr-3"
-        >
-          <FiMenu size={20} /> {/* Toggle Sidebar Icon */}
-        </Button>
+
+      {/* Right Aligned Profile and Theme Toggle */}
+      <Nav className="ms-auto navbar-icons">
         <Dropdown align="end">
           <Dropdown.Toggle
             variant="primary"
@@ -38,6 +47,10 @@ function NavbarComponent({ toggleSidebar }) {
             <Dropdown.Item href="/logout">Logout</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
+
+        <Button onClick={toggleTheme} variant="outline-light" className="ms-3">
+          Toggle {theme === "light" ? "Dark" : "Light"} Mode
+        </Button>
       </Nav>
     </Navbar>
   );
