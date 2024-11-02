@@ -1,116 +1,55 @@
 // src/context/AuthContext.js
-import React, { createContext, useState, useContext, useEffect } from "react";
-import axios from "axios";
-import api from "../axiosConfig";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { Navigate } from "react-router-dom";
 
-// Define default values for the AuthContext to prevent null errors if the provider is missing
-export const AuthContext = createContext({
-  isAuthenticated: false,
-  login: () => {},
-  logout: () => {},
-  user: null,
-  token: null,
-  register: () => {},
-  setToken: () => {},
-});
+// Create the context
+const AuthContext = createContext(null);
 
-export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+// Custom hook for accessing the auth context
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+}
 
-  const login = () => setIsAuthenticated(true);
-  const logout = () => setIsAuthenticated(false);
 
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
+// Provider component
+export function AuthProvider({ children }) {
+  // Load initial auth state from localStorage or default to false
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return localStorage.getItem("isAuthenticated") === "true";
+  });
 
-  /*
-  // Login function to handle authentication logic and update state
-  const login = async (email, password) => {
-    try {
-      const response = await api.post("/api/login", { email, password });
-      const { token, user } = response.data;
-      setToken(token);
-      setUser(user);
-      setIsAuthenticated(true);
-      localStorage.setItem("token", token);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    } catch (error) {
-      console.error("Login failed:", error);
-      setIsAuthenticated(false);
-    }
-  };*/
+  // Function to log in and save token
+  const login = (token) => {
+    localStorage.setItem("authToken", token); // Save token to localStorage
+    setIsAuthenticated(true);
+    localStorage.setItem("isAuthenticated", "true"); // Persist login state
+  };
 
-  /*
-  // Logout function to clear user session and remove token from storage
+  // Function to log out and clear token
   const logout = () => {
+    localStorage.removeItem("authToken"); // Remove token from localStorage
     setIsAuthenticated(false);
-    setToken(null);
-    setUser(null);
-    localStorage.removeItem("token");
-    delete axios.defaults.headers.common["Authorization"];
-  };*/
-  
-  // Registration function to handle user registration and update state
-  const register = async (email, password) => {
-    try {
-      const response = await api.post("/api/register/", { email, password });
-      const { token, user } = response.data;
-      setToken(token);
-      setUser(user);
-      setIsAuthenticated(true);
-      localStorage.setItem("token", token);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    } catch (error) {
-      console.error("Registration failed:", error);
-      setIsAuthenticated(false);
-    }
+    localStorage.removeItem("isAuthenticated"); // Clear login state
+    Navigate("/login"); // Redirect to login page immediately
   };
 
-  // Function to check and validate the token on initial load
-  const checkToken = async () => {
-    if (token) {
-      try {
-        const response = await api.get("/api/validate-token/", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (response.status === 200) {
-          setIsAuthenticated(true);
-        } else {
-          logout();
-        }
-      } catch (error) {
-        console.error("Token validation failed:", error);
-        logout();
-      }
-    }
-  };
-
-  // Automatically validate token on initial load if it exists
-  /*
+  // Sync state with localStorage whenever isAuthenticated changes
   useEffect(() => {
-    checkToken();
-  }, [token]);
-  */
+    localStorage.setItem("isAuthenticated", isAuthenticated.toString());
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      setIsAuthenticated(true); // Set authenticated if token exists
+    }
+  }, [isAuthenticated]);
+
 
   return (
-    <AuthContext.Provider
-      value={{
-        isAuthenticated,
-        login,
-        logout,
-        user,
-        token,
-        register,
-        setToken,
-      }}
-    >
+    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
-};
-
-// export default AuthProvider;
-
-export function useAuth() {
-  return useContext(AuthContext);
 }

@@ -6,25 +6,41 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Dashboard from "./components/Dashboard";
-import DashboardHome from "./components/DashboardHome";
-import Assets from "./pages/Assets";
-import Employees from "./pages/Employees";
 import AppProviders from "./context/Providers";
 import ErrorBoundary from "./components/ErrorBoundary";
-import PrivateRoute from "./components/PrivateRoute"; // Authentication guard
+import PrivateRoute from "./components/PrivateRoute";
 import Login from "./components/Login";
+import Dashboard from "./components/Dashboard";
+import { useAuth } from "./context/AuthContext"; // Access authentication status
 
 function App() {
+  const { isAuthenticated } = useAuth();
+
   return (
     <AppProviders>
       <Router>
         <ErrorBoundary>
           <Routes>
+            {/* Redirect to Dashboard if authenticated, else show Login */}
+            <Route
+              path="/login"
+              element={
+                isAuthenticated ? <Navigate to="/dashboard" /> : <Login />
+              }
+            />
+
+            {/* Protect Dashboard route */}
+            <Route
+              path="/dashboard"
+              element={
+                isAuthenticated ? <Dashboard /> : <Navigate to="/login" />
+              }
+            />
+
             {/* Public Route for Login */}
             <Route path="/login" element={<Login />} />
 
-            {/* Protected Routes under Dashboard */}
+            {/* Protected Routes for Dashboard */}
             <Route
               path="/dashboard/*"
               element={
@@ -32,15 +48,15 @@ function App() {
                   <Dashboard />
                 </PrivateRoute>
               }
-            >
-              {/* Nested Dashboard Routes */}
-              <Route index element={<DashboardHome />} /> {/* Dashboard home */}
-              <Route path="assets" element={<Assets />} />
-              <Route path="employees" element={<Employees />} />
-            </Route>
+            />
 
-            {/* Default Redirect */}
-            <Route path="*" element={<Navigate to="/dashboard" />} />
+            {/* Fallback Route for Undefined Paths */}
+            <Route
+              path="*"
+              element={
+                <Navigate to={isAuthenticated ? "/dashboard" : "/login"} />
+              }
+            />
           </Routes>
         </ErrorBoundary>
       </Router>

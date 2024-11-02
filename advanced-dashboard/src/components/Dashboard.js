@@ -1,8 +1,11 @@
 // src/components/Dashboard.js
 import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Routes, Route, Outlet } from "react-router-dom";
 import NavbarComponent from "./NavbarComponent";
 import Sidebar from "./Sidebar";
+import DashboardHome from "./DashboardHome";
+import Assets from "../pages/Assets";
+import Employees from "../pages/Employees";
 import "./Dashboard.css";
 
 function Dashboard() {
@@ -21,9 +24,13 @@ function Dashboard() {
           className={`dashboard-main ${isSidebarVisible ? "" : "full-width"}`}
         >
           <div className="scrollable-content">
-            <Outlet />{"  "}
-            {/* Main content displayed here with a dedicated scrollbar */}
-            
+            <Routes>
+              <Route path="dashboardhome" element={<DashboardHome />} />{" "}
+              {/* Dashboard home */}
+              <Route path="assets" element={<Assets />} />
+              <Route path="employees" element={<Employees />} />
+            </Routes>
+            <Outlet /> {/* Renders nested routes */}
           </div>
         </main>
       </div>

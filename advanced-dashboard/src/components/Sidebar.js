@@ -11,31 +11,19 @@ function Sidebar() {
 
   return (
     <div className="sidebar">
-      <h2 className="sidebar-title">Asset Management System</h2>
+      <h2 className="sidebar-title">Actions</h2>
       <nav className="sidebar-links">
-        <Link
-          to="/"
-          className={`sidebar-link ${
-            location.pathname === "/" ? "active" : ""
-          }`}
-        >
-          <FaHome className="icon" /> Dashboard Home
+        <Link to="dashboardhome" className="sidebar-link">
+          <FaHome className="icon" />
+          Dashboard Home
         </Link>
-        <Link
-          to="/assets"
-          className={`sidebar-link ${
-            location.pathname === "/assets" ? "active" : ""
-          }`}
-        >
-          <FaDatabase className="icon" /> Assets
+        <Link to="assets" className="sidebar-link">
+          <FaDatabase className="icon" />
+          Assets
         </Link>
-        <Link
-          to="/employees"
-          className={`sidebar-link ${
-            location.pathname === "/employees" ? "active" : ""
-          }`}
-        >
-          <FaUsers className="icon" /> Employees
+        <Link to="employees" className="sidebar-link">
+          <FaUsers className="icon" />
+          Assets
         </Link>
       </nav>
       <div className="sidebar-footer">
