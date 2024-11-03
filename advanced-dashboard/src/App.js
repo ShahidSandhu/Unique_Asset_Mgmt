@@ -11,36 +11,16 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
-import { useAuth } from "./context/AuthContext"; // Access authentication status
 
 function App() {
-  const { isAuthenticated } = useAuth();
-
   return (
     <AppProviders>
       <Router>
         <ErrorBoundary>
           <Routes>
-            {/* Redirect to Dashboard if authenticated, else show Login */}
-            <Route
-              path="/login"
-              element={
-                isAuthenticated ? <Navigate to="/dashboard" /> : <Login />
-              }
-            />
-
-            {/* Protect Dashboard route */}
-            <Route
-              path="/dashboard"
-              element={
-                isAuthenticated ? <Dashboard /> : <Navigate to="/login" />
-              }
-            />
-
-            {/* Public Route for Login */}
+            {/* Login Route with Redirect if Authenticated */}
             <Route path="/login" element={<Login />} />
-
-            {/* Protected Routes for Dashboard */}
+            {/* Protected Dashboard Route */}
             <Route
               path="/dashboard/*"
               element={
@@ -49,14 +29,8 @@ function App() {
                 </PrivateRoute>
               }
             />
-
             {/* Fallback Route for Undefined Paths */}
-            <Route
-              path="*"
-              element={
-                <Navigate to={isAuthenticated ? "/dashboard" : "/login"} />
-              }
-            />
+            <Route path="*" element={<Navigate to="/login" />} />
           </Routes>
         </ErrorBoundary>
       </Router>

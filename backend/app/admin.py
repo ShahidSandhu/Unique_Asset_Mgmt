@@ -48,6 +48,6 @@ class DepartmentAdmin(admin.ModelAdmin):
 
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'user', 'created_at', 'updated_at')
+    list_display = ('name', 'created_at', 'updated_at')
     search_fields = ('name', 'user__username')
     readonly_fields = ('update_count',)

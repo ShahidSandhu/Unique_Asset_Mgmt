@@ -27,12 +27,12 @@ router.register(r'employees', EmployeeViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),  # Includes all viewset routes under `/api/`
-    path('admin/', admin.site.urls),  # Admin panel
+    # path('admin/', admin.site.urls),  # THIS INCLUDED IN PROJECT urls.py 
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # JWT login
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  # JWT refresh
     path('validate-token/', ValidateTokenView.as_view(), name='validate-token'),
     # path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # JWT login
     # path('login/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('login/', CustomLoginView.as_view(), name='custom_login'),
+    path('login/', CustomLoginView.as_view(), name='custom_login'),  # Default with email and password
     path('user/', UserProfileView.as_view(), name='user-profile'),  # User profile endpoint
 ]

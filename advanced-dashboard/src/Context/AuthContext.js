@@ -1,8 +1,6 @@
 // src/context/AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
 
-// Create the context
 const AuthContext = createContext(null);
 
 // Custom hook for accessing the auth context
@@ -14,41 +12,45 @@ export function useAuth() {
   return context;
 }
 
-
 // Provider component
 export function AuthProvider({ children }) {
+  const [loading, setLoading] = useState(true);
   // Load initial auth state from localStorage or default to false
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem("isAuthenticated") === "true";
   });
 
+  useEffect(() => {
+    // Check for token in localStorage on initial load
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      setIsAuthenticated(true);
+    }
+    setLoading(false);
+  }, []);
+  
   // Function to log in and save token
   const login = (token) => {
-    localStorage.setItem("authToken", token); // Save token to localStorage
+    localStorage.setItem("authToken", token);
+    localStorage.setItem("isAuthenticated", "true");
     setIsAuthenticated(true);
-    localStorage.setItem("isAuthenticated", "true"); // Persist login state
   };
 
   // Function to log out and clear token
   const logout = () => {
-    localStorage.removeItem("authToken"); // Remove token from localStorage
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("isAuthenticated");
     setIsAuthenticated(false);
-    localStorage.removeItem("isAuthenticated"); // Clear login state
-    Navigate("/login"); // Redirect to login page immediately
   };
 
-  // Sync state with localStorage whenever isAuthenticated changes
-  useEffect(() => {
-    localStorage.setItem("isAuthenticated", isAuthenticated.toString());
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      setIsAuthenticated(true); // Set authenticated if token exists
-    }
-  }, [isAuthenticated]);
 
+  // Wait for loading state to resolve before rendering children
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

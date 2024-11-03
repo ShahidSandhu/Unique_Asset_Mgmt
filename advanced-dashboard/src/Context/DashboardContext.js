@@ -21,7 +21,6 @@ export function DashboardProvider({ children }) {
     document.body.className = theme === "light" ? "light-theme" : "dark-theme";
   }, [theme]);
 
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,10 +36,10 @@ export function DashboardProvider({ children }) {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 10000);
-    return () => clearInterval(interval);
-  }, []);
-  
+    // Remove the interval for fetching data every 10 seconds
+    // const interval = setInterval(fetchData, 10000);
+    // return () => clearInterval(interval);
+  }, []); // The useEffect with an empty dependency array ([]) runs once when the component mounts, which includes when the page is loaded.
 
   return (
     <DashboardContext.Provider

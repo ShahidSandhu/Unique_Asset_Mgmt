@@ -5,10 +5,11 @@ import { FiMenu } from "react-icons/fi";
 import "./Navbar.css";
 import { DashboardContext } from "../context/DashboardContext"; // Import the context
 import { useAuth } from "../context/AuthContext";
+import LogoutButton from "./LogoutButton";
 
 
 function NavbarComponent({ toggleSidebar }) {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated } = useAuth();
   const dashboardContext = useContext(DashboardContext);
   const theme = dashboardContext?.theme || "light";
   const toggleTheme = dashboardContext?.toggleTheme || (() => {});
@@ -48,7 +49,10 @@ function NavbarComponent({ toggleSidebar }) {
             <Dropdown.Item href="/profile">Profile</Dropdown.Item>
             <Dropdown.Item href="/settings">Settings</Dropdown.Item>
             {/* {isAuthenticated && <button onClick={logout}>Logout</button>} */}
-            {isAuthenticated && (<Dropdown.Item href="/logout">Logout</Dropdown.Item>) }
+            {isAuthenticated && (<LogoutButton>
+              {/* Add the Logout Button */}
+              Logout
+            </LogoutButton>)}
           </Dropdown.Menu>
         </Dropdown>
 

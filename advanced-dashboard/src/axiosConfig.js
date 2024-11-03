@@ -7,6 +7,16 @@ const api = axios.create({
   baseURL: "http://localhost:8000", // Set your API base URL here
 });
 
+/*
+const api = axios.create({
+  baseURL: "http://localhost:8000",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true, // Use this if the server requires cookies to be sent with requests
+});
+*/
+
 
 // Add a request interceptor to include the token in headers for each request
 api.interceptors.request.use(
