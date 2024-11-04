@@ -66,24 +66,23 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
+# Alternatively, to allow all origins (use cautiously):
+CORS_ALLOW_ALL_ORIGINS = True
+
 CORS_ALLOW_METHODS = [
     "GET",
     "POST",
-    "OPTIONS",
     "PUT",
     "PATCH",
     "DELETE",
+    "OPTIONS"
 ]
 
 CORS_ALLOW_HEADERS = [
     "content-type",
     "authorization",
-    "x-csrftoken",  # Add CSRF token if needed
-    "accept",
-    "x-requested-with",
-    # Add any additional headers you may need
+    "x-csrftoken"
 ]
-
 
 ROOT_URLCONF = 'project.urls'
 

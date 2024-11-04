@@ -1,7 +1,14 @@
 /* src/components/Login.css */
 
+
 body {
-  font-family: 'Poppins', sans-serif; /* Stylish font */
+  font-family: 'Poppins', sans-serif; /* 
+Stylish font */
+  margin: 0; /* Remove default margin */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+body.login-page {
   margin: 0;
   height: 100vh;
   display: flex;

@@ -7,29 +7,29 @@ import api from "../axiosConfig";
 export const AuthContext = createContext({
   isAuthenticated: false,
   user: null,
-  token: null,
+  accessToken: null,
   login: () => {},
   logout: () => {},
   register: () => {},
-  setToken: () => {},
+  setAccessToken: () => {},
 });
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken") || null);
 
   // Login function to handle authentication logic and update state
   const login = async (email, password) => {
     try {
       const response = await api.post("/api/login", { email, password });
-      const { token, user } = response.data;
-      setToken(token);
+      const { accessToken, user } = response.data;
+      setAccessToken(accessToken);
       setUser(user);
       setIsAuthenticated(true);
-      localStorage.setItem("token", token);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      localStorage.setItem("accessToken", accessToken);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     } catch (error) {
       console.error("Login failed:", error);
       setIsAuthenticated(false);
@@ -40,24 +40,24 @@ export const AuthProvider = ({ children }) => {
   const register = async (email, password) => {
     try {
       const response = await api.post("/api/register", { email, password });
-      const { token, user } = response.data;
-      setToken(token);
+      const { accessToken, user } = response.data;
+      setAccessToken(accessToken);
       setUser(user);
       setIsAuthenticated(true);
-      localStorage.setItem("token", token);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      localStorage.setItem("accessToken", accessToken);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     } catch (error) {
       console.error("Registration failed:", error);
       setIsAuthenticated(false);
     }
   };
 
-  // Function to check and validate the token on initial load
+  // Function to check and validate the accessToken on initial load
   const checkToken = async () => {
-    if (token) {
+    if (accessToken) {
       try {
         const response = await api.get("/api/validate-token", {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
         });
         if (response.status === 200) {
           setIsAuthenticated(true);
@@ -71,17 +71,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Automatically validate token on initial load if it exists
+  // Automatically validate accessToken on initial load if it exists
   useEffect(() => {
     checkToken();
-  }, [token]);
+  }, [accessToken]);
 
-  // Logout function to clear user session and remove token from storage
+  // Logout function to clear user session and remove accessToken from storage
   const logout = () => {
     setIsAuthenticated(false);
-    setToken(null);
+    setAccessToken(null);
     setUser(null);
-    localStorage.removeItem("token");
+    localStorage.removeItem("accessToken");
     delete axios.defaults.headers.common["Authorization"];
   };
 
@@ -90,11 +90,11 @@ export const AuthProvider = ({ children }) => {
       value={{
         isAuthenticated,
         user,
-        token,
+        accessToken,
         login,
         logout,
         register,
-        setToken,
+        setAccessToken,
       }}
     >
       {children}

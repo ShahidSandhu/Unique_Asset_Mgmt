@@ -22,7 +22,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     // Check for token in localStorage on initial load
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("accessToken");
     if (token) {
       setIsAuthenticated(true);
     }
@@ -31,14 +31,14 @@ export function AuthProvider({ children }) {
   
   // Function to log in and save token
   const login = (token) => {
-    localStorage.setItem("authToken", token);
+    localStorage.setItem("accessToken", token);
     localStorage.setItem("isAuthenticated", "true");
     setIsAuthenticated(true);
   };
 
   // Function to log out and clear token
   const logout = () => {
-    localStorage.removeItem("authToken");
+    localStorage.removeItem("accessToken");
     localStorage.removeItem("isAuthenticated");
     setIsAuthenticated(false);
   };
