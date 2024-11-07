@@ -13,9 +13,9 @@ function Sidebar() {
     <div className="sidebar">
       <h2 className="sidebar-title">Actions</h2>
       <nav className="sidebar-links">
-        <Link to="dashboardhome" className="sidebar-link">
+        <Link to="home" className="sidebar-link">
           <FaHome className="icon" />
-          Dashboard Home
+          Home
         </Link>
         <Link to="assets" className="sidebar-link">
           <FaDatabase className="icon" />

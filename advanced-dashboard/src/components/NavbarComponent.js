@@ -31,7 +31,7 @@ function NavbarComponent({ toggleSidebar }) {
       </Button>
 
       {/* Navbar Brand */}
-      <Navbar.Brand href="/" className="navbar-brand">
+      <Navbar.Brand href="/dashboard/home" className="navbar-brand">
         Asset Management System
       </Navbar.Brand>
 
