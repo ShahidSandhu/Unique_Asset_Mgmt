@@ -1,9 +1,9 @@
-// src/components/Home.js
+// src/components/DashboardHome.js
 import React from "react";
 import DataCard from "./DataCard";
 import ChartCard from "./ChartCard"; // Assume this component renders a chart
 
-function Home() {
+function DashboardHome() {
   const sampleData = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
     datasets: [
@@ -16,7 +16,7 @@ function Home() {
   };
 
   return (
-    <div className="home">
+    <div className="dashboard-home">
       <h2>Dashboard Overview</h2>
       <div className="data-cards">
         <DataCard title="Total Assets" value="120" />
@@ -29,4 +29,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default DashboardHome;

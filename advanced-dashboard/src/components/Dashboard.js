@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
 import NavbarComponent from "./NavbarComponent";
 import Sidebar from "./Sidebar";
-import Home from "./Home";
+import DashboardHome from "./DashboardHome";
 import Assets from "../pages/Assets";
 import Employees from "../pages/Employees";
 import "./Dashboard.css";
@@ -25,7 +25,7 @@ function Dashboard() {
         >
           <div className="scrollable-content">
             <Routes>
-              <Route path="home" element={<Home />} />{" "}
+              <Route path="dashboardhome" element={<DashboardHome />} />{" "}
               {/* Dashboard home */}
               <Route path="assets" element={<Assets />} />
               <Route path="employees" element={<Employees />} />

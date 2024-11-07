@@ -1,17 +1,9 @@
+// src/context/AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from "react";
-import apiClient from "../utils/axiosSetup";
 
-/*
-export const AuthContext = createContext({
-  isAuthenticated: false,
-  user: null,
-  accessToken: null,
-  login: () => {},
-  logout: () => {},
-  setAccessToken: () => {},
-});*/
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
+// Custom hook for accessing the auth context
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
@@ -20,118 +12,46 @@ export function useAuth() {
   return context;
 }
 
-// Utility function to check token expiry
-function isTokenExpired(token) {
-  if (!token) return true;
-
-  const tokenParts = JSON.parse(atob(token.split(".")[1]));
-  const expiryTime = tokenParts.exp * 1000; // Convert expiry time to milliseconds
-
-  return Date.now() > expiryTime; // Return true if token is expired
-}
-
 // Provider component
-const AuthProvider = ({ children }) => {
+export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
-  const [accessToken, setAccessToken] = useState(
-    localStorage.getItem("accessToken")
-  );
-  const [refreshToken, setRefreshToken] = useState(
-    localStorage.getItem("refreshToken")
-  );
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    localStorage.getItem("isAuthenticated") === "true"
-  );
-
-  // Function to refresh the access token using the refresh token
-  const refreshAccessToken = async () => {
-    if (isTokenExpired(refreshToken)) {
-      console.log("Refresh token expired, please log in again.");
-      logout(); // Trigger logout only after confirming refresh token expiration
-      return null;
-    }
-
-    try {
-      const response = await apiClient.post("/api/token/refresh", {
-        refreshToken,
-      });
-      const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-        response.data;
-
-      // Update tokens in local storage
-      setAccessToken(newAccessToken);
-      setRefreshToken(newRefreshToken);
-      localStorage.setItem("accessToken", newAccessToken);
-      localStorage.setItem("refreshToken", newRefreshToken);
-      localStorage.setItem("isAuthenticated", "true");
-
-      console.log("In AuthContext, newAccessToken: " + newAccessToken);
-      return newAccessToken;
-    } catch (error) {
-      console.error("Error refreshing access token:", error);
-      logout();
-      return null;
-    }
-  };
-
-  // Function to get a valid access token
-  const getAccessToken = async () => {
-    if (accessToken && !isTokenExpired(accessToken)) {
-      return accessToken;
-    }
-    return await refreshAccessToken();
-  };
-
-  const login = ({ accessToken, refreshToken }) => {
-    console.log("login called with accessToken: " + accessToken);
-    localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("refreshToken", refreshToken);
-    localStorage.setItem("isAuthenticated", "true");
-    setIsAuthenticated(true);
-    setAccessToken(accessToken);
-    setRefreshToken(refreshToken);
-  };
-
-  const logout = () => {
-    console.log("logout called");
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("isAuthenticated");
-    setIsAuthenticated(false);
-    setAccessToken(null);
-    setRefreshToken(null);
-  };
+  // Load initial auth state from localStorage or default to false
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return localStorage.getItem("isAuthenticated") === "true";
+  });
 
   useEffect(() => {
-    // When the app loads, try to refresh the token if possible
+    // Check for token in localStorage on initial load
     const token = localStorage.getItem("accessToken");
-    const refreshToken = localStorage.getItem("refreshToken");
-
-    // If we have an access token, try to validate it and refresh if needed
     if (token) {
       setIsAuthenticated(true);
-      setLoading(false);
-    } else if (refreshToken) {
-      // If we have a refresh token but no access token, try to refresh
-      refreshToken();
-    } else {
-      // If no tokens are found, log the user out
-      logout();
     }
     setLoading(false);
   }, []);
+  
+  // Function to log in and save token
+  const login = (token) => {
+    localStorage.setItem("accessToken", token);
+    localStorage.setItem("isAuthenticated", "true");
+    setIsAuthenticated(true);
+  };
 
+  // Function to log out and clear token
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("isAuthenticated");
+    setIsAuthenticated(false);
+  };
+
+
+  // Wait for loading state to resolve before rendering children
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <AuthContext.Provider
-      value={{ isAuthenticated, login, logout, getAccessToken, loading }}
-    >
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
-};
-
-export default AuthProvider;
+}
