@@ -54,7 +54,7 @@ function Login() {
       if (response.status === 200) {
         login(response.data.accessToken);
         
-        navigate("/dashboard");
+        navigate("/dashboard/home");
       }
     } catch (error) {
       // Handle errors as before

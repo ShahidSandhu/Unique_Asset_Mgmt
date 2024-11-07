@@ -18,26 +18,6 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Function to refresh the access token
-const refreshAccessToken = async () => {
-  const refreshToken = localStorage.getItem("refreshToken"); // Retrieve refresh token from local storage
-  if (!refreshToken) return null;
-
-  try {
-    const response = await api.post("/api/token/refresh/", {
-      refresh: refreshToken,
-    });
-    const newAccessToken = response.data.access;
-    // Store the new access token
-    localStorage.setItem("accessToken", newAccessToken);
-    return newAccessToken; // Return the new access token
-  } catch (error) {
-    console.error("Failed to refresh token:", error);
-    localStorage.removeItem("accessToken"); // Clear tokens on error
-    localStorage.removeItem("refreshToken");
-    throw error; // Rethrow the error for further handling
-  }
-};
 
 // Add a response interceptor to handle token refresh logic
 api.interceptors.response.use(
@@ -57,5 +37,28 @@ api.interceptors.response.use(
     return Promise.reject(error); // Reject the promise if no handling was done
   }
 );
+
+
+// Function to refresh the access token
+const refreshAccessToken = async () => {
+  const refreshToken = localStorage.getItem("refreshToken"); 
+  // Retrieve refresh token from local storage
+  if (!refreshToken) return null;
+
+  try {
+    const response = await api.post("/api/token/refresh/", {
+      refresh: refreshToken,
+    });
+    const newAccessToken = response.data.access;
+    // Store the new access token
+    localStorage.setItem("accessToken", newAccessToken);
+    return newAccessToken; // Return the new access token
+  } catch (error) {
+    console.error("Failed to refresh token:", error);
+    localStorage.removeItem("accessToken"); // Clear tokens on error
+    localStorage.removeItem("refreshToken");
+    throw error; // Rethrow the error for further handling
+  }
+};
 
 export default api;
