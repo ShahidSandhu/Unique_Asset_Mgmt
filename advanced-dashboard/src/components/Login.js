@@ -1,7 +1,6 @@
-// src/components/Login.js
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import api from "../axiosConfig";
+import apiClient from "../utils/axiosSetup";
 import { useAuth } from "../context/AuthContext";
 import "./Login.css";
 
@@ -10,16 +9,33 @@ function Login() {
   if (!auth) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
-  const { login } = auth;
-  const navigate = useNavigate();
-
-  const [identifier, setIdentifier] = useState(""); // Changed from email to identifier
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
+  const { getAccessToken } = useAuth();
   const [error, setError] = useState(null);
   const [validationError, setValidationError] = useState(null);
+  const navigate = useNavigate();
+  const { setIsAuthenticated } = useAuth(); // Assuming you have this in your AuthContext
+  const [credentials, setCredentials] = useState({
+    username: "",
+    password: "",
+  });
+
+  const { login } = auth;
+
+
+  // Removed early clearing of tokens before login attempt
   const resetErrors = () => {
     setError(null);
     setValidationError(null);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setCredentials((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const [loading, setLoading] = useState(false);
@@ -29,8 +45,6 @@ function Login() {
   // Effect to manage body class
   useEffect(() => {
     document.body.classList.add("login-page");
-
-    // Cleanup function to remove the class on unmount
     return () => {
       document.body.classList.remove("login-page");
     };
@@ -40,7 +54,7 @@ function Login() {
     e.preventDefault();
     resetErrors();
 
-    // Client-side validation
+    // Check if identifier or password is missing
     if (!identifier || !password) {
       setValidationError("Username or email and password are required.");
       return;
@@ -49,21 +63,33 @@ function Login() {
     setLoading(true);
 
     try {
-      // API call with identifier (username or email)
-      const response = await api.post("/api/login/", { identifier, password });
-      if (response.status === 200) {
-        login(response.data.accessToken);
-        
-        navigate("/dashboard");
-      }
+      console.log("in LoginPage, Login called successfully");
+
+      // Perform login API call
+      const response = await apiClient.post("/api/login/", {
+        username: identifier,
+        password: password,
+      });
+      console.log("in LoginPage, after login request");
+      // Store the tokens in localStorage
+      localStorage.setItem("accessToken", response.data.accessToken);
+      localStorage.setItem("refreshToken", response.data.refreshToken);
+
+      setIsAuthenticated(true);
+      navigate("/dashboard/home");
+      // Check if login is successful
+
+      // Store the tokens in localStorage
+      localStorage.setItem("accessToken", response.data.accessToken);
+      localStorage.setItem("refreshToken", response.data.refreshToken);
+
+      setIsAuthenticated(true);
+      navigate("/dashboard/home");
+
     } catch (error) {
-      // Handle errors as before
       if (error.response) {
         if (error.response.status === 400) {
-          setError(
-            error.response.data.message ||
-              "Invalid input. Please check your details and try again."
-          );
+          setError("Invalid input. Please check your details and try again.");
         } else if (error.response.status === 401) {
           setError(
             "Unauthorized: Please check your username/email and password."
@@ -80,7 +106,7 @@ function Login() {
       } else if (error.request) {
         setError("Network error. Please check your connection.");
       } else {
-        setError("An unexpected error occurred.");
+        setError("An unexpected error occurred. Login attempt");
       }
     } finally {
       setLoading(false);
@@ -95,7 +121,7 @@ function Login() {
         {error && <p className="error-message">{error}</p>}
         <form onSubmit={handleSubmit} className="login-form">
           <input
-            type="text" // Changed type to text to accept both email and username
+            type="text"
             placeholder="Username or Email"
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
