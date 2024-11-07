@@ -1,7 +1,6 @@
 // src/context/DashboardContext.js
 import React, { createContext, useState, useEffect } from "react";
-// import api from "../axiosConfig";
-import apiClient from "../utils/axiosSetup";
+import api from "../axiosConfig";
 import { toast } from "react-toastify";
 
 export const DashboardContext = createContext({
@@ -22,25 +21,19 @@ export function DashboardProvider({ children }) {
     document.body.className = theme === "light" ? "light-theme" : "dark-theme";
   }, [theme]);
 
-  const fetchData = async () => {
-    try {
-      const assetsResponse = await apiClient.get("/api/assets/");
-      const employeesResponse = await apiClient.get("/api/employees/");
-      setAssets(assetsResponse.data);
-      setEmployees(employeesResponse.data);
-      toast.success("Data fetched successfully!");
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      toast.error("Failed to fetch data.");
-      // Optionally handle specific error status codes
-      if (error.response && error.response.status === 401) {
-        toast.error("Unauthorized - Please log in again.");
-        // Redirect to login or clear session if needed
-      }
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const assetsResponse = await api.get("/api/assets/");
+        const employeesResponse = await api.get("/api/employees/");
+        setAssets(assetsResponse.data);
+        setEmployees(employeesResponse.data);
+        toast.success("Data fetched successfully!");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        toast.error("Failed to fetch data.");
+      }
+    };
 
     fetchData();
     // Remove the interval for fetching data every 10 seconds

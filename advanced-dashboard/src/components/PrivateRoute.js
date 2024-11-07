@@ -11,11 +11,7 @@ function PrivateRoute({ children }) {
     return <div>Loading...</div>;
   }
 
-   if (!isAuthenticated) {
-     return <Navigate to="/login" state={{ from: location }} />;
-   }
-  
-  return children;
+  return isAuthenticated ? children : <Navigate to="/login" state={{ from: location }} />;
 }
 
 export default PrivateRoute;
