@@ -9,7 +9,7 @@ import {
   FaMoon,
   FaSun,
   FaUserCircle,
-} from "react-icons/fa"; // Add profile icon
+} from "react-icons/fa";
 import "./Sidebar.css";
 
 function Sidebar() {
@@ -55,6 +55,15 @@ function Sidebar() {
         >
           <FaUserCircle className="icon" />
           User
+        </Link>
+        <Link
+          to="TestScroll"
+          className={`sidebar-link ${
+            location.pathname.includes("TestScroll") ? "active" : ""
+          }`}
+        >
+          <FaUserCircle className="icon" />
+          TestScroll
         </Link>
       </nav>
       <div className="sidebar-footer">

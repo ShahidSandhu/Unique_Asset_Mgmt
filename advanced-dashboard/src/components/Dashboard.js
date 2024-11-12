@@ -6,8 +6,9 @@ import Sidebar from "./Sidebar";
 import Home from "./Home";
 import Assets from "../pages/Assets";
 import Employees from "../pages/Employees";
+import Users from "./Users"; // Users component import
 import "./Dashboard.css";
-import Users from "./Users";
+import TestScroll from '../components/TestScroll'; // Adjust path if needed
 
 function Dashboard() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
@@ -26,11 +27,12 @@ function Dashboard() {
         >
           <div className="scrollable-content">
             <Routes>
-              <Route path="home" element={<Home />} /> {/* Dashboard home */}
+              <Route path="home" element={<Home />} />
               <Route path="assets" element={<Assets />} />
               <Route path="employees" element={<Employees />} />
-              <Route path="Users" element={<Users />} />{" "}
-              {/* Corrected route */}
+              <Route path="users" element={<Users />} />{" "}
+              <Route path="testscroll" element={<TestScroll />} />{" "}
+              {/* Correct route for Users */}
             </Routes>
             <Outlet /> {/* Renders nested routes */}
           </div>

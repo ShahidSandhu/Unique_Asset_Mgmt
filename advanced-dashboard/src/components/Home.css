@@ -1,14 +1,21 @@
 /* src/components/Home.css */
+
+/* src/components/Home.css */
 .dashboard-home {
+  width: 200%; /* Make the component fill the full width */
   padding: 20px;
+  box-sizing: border-box; /* Ensure padding does not add to width */
 }
 
 .data-cards {
   display: flex;
+  flex-wrap: wrap; /* Allows cards to wrap if they exceed container width */
   gap: 20px;
   margin-bottom: 20px;
+  width: 100%; /* Ensure full width */
 }
 
 .chart-section {
   margin-top: 20px;
+  width: 100%; /* Make sure the chart section also spans full width */
 }

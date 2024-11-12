@@ -12,12 +12,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import { useAuth } from "./context/AuthContext";
-import Users from "./components/Users"; // Import the UserProfile component
 // import React from "react";
-import UserList from "../src/components/UserList";
-import CreateUser from "../src/components/CreateUser";
-import UpdateUser from "../src/components/UpdateUser";
-import DeleteUser from "./components/DeleteUser";
 
 function App() {
   const { isAuthenticated, loading } = useAuth();

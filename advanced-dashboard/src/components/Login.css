@@ -1,5 +1,6 @@
 /* Login.css */
-body {
+/* Add a new class specific to the Login page */
+.login-page {
   font-family: 'Roboto', sans-serif;
   background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
   display: flex;
@@ -8,6 +9,11 @@ body {
   height: 100vh;
   margin: 0;
 }
+
+
+/* Additional styles for inputs, buttons, etc. */
+
+
 
 .login-container {
   display: flex;
