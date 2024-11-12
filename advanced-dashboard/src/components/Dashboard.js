@@ -7,7 +7,7 @@ import Home from "./Home";
 import Assets from "../pages/Assets";
 import Employees from "../pages/Employees";
 import "./Dashboard.css";
-import UserProfile from "./User";
+import Users from "./Users";
 
 function Dashboard() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
@@ -29,7 +29,7 @@ function Dashboard() {
               <Route path="home" element={<Home />} /> {/* Dashboard home */}
               <Route path="assets" element={<Assets />} />
               <Route path="employees" element={<Employees />} />
-              <Route path="UserProfile" element={<UserProfile />} />{" "}
+              <Route path="Users" element={<Users />} />{" "}
               {/* Corrected route */}
             </Routes>
             <Outlet /> {/* Renders nested routes */}

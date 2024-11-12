@@ -48,9 +48,9 @@ function Sidebar() {
           Employee
         </Link>
         <Link
-          to="user"
+          to="users"
           className={`sidebar-link ${
-            location.pathname.includes("user") ? "active" : ""
+            location.pathname.includes("users") ? "active" : ""
           }`}
         >
           <FaUserCircle className="icon" />

@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 export const DashboardContext = createContext({
   assets: [],
   employees: [],
-  user: [],
+  users: [],
   theme: "light",
   toggleTheme: () => {},
 });

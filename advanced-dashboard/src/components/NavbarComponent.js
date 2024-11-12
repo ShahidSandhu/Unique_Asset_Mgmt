@@ -6,7 +6,7 @@ import "./Navbar.css";
 import { DashboardContext } from "../context/DashboardContext"; // Import the context
 import { useAuth } from "../context/AuthContext";
 import LogoutButton from "./LogoutButton";
-import User from "./User";
+import User from "./Users";
 import { Link, useLocation } from "react-router-dom";
 
 function NavbarComponent({ toggleSidebar }) {

@@ -12,7 +12,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import { useAuth } from "./context/AuthContext";
-import User from "./components/User"; // Import the UserProfile component
+import Users from "./components/Users"; // Import the UserProfile component
 // import React from "react";
 import UserList from "../src/components/UserList";
 import CreateUser from "../src/components/CreateUser";
@@ -43,7 +43,7 @@ function App() {
             ) : (
               <Route path="/login" element={<Login />} />
             )}
-            <Route  path="*" element={ <Navigate to={isAuthenticated ? "/dashboard" : "/login"} /> }  />
+            <Route  path="*" element={ <Navigate to={isAuthenticated ? "/dashboard/home" : "/login"} /> }  />
           </Routes>
         </ErrorBoundary>
       </Router>
