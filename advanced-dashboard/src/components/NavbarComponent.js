@@ -6,7 +6,8 @@ import "./Navbar.css";
 import { DashboardContext } from "../context/DashboardContext"; // Import the context
 import { useAuth } from "../context/AuthContext";
 import LogoutButton from "./LogoutButton";
-
+import User from "./User";
+import { Link, useLocation } from "react-router-dom";
 
 function NavbarComponent({ toggleSidebar }) {
   const { isAuthenticated } = useAuth();
@@ -46,13 +47,17 @@ function NavbarComponent({ toggleSidebar }) {
             <FaUserCircle size={24} />
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item href="/profile">Profile</Dropdown.Item>
+            <Dropdown.Item as={Link} to="/user">
+              user
+            </Dropdown.Item>
             <Dropdown.Item href="/settings">Settings</Dropdown.Item>
             {/* {isAuthenticated && <button onClick={logout}>Logout</button>} */}
-            {isAuthenticated && (<LogoutButton>
-              {/* Add the Logout Button */}
-              Logout
-            </LogoutButton>)}
+            {isAuthenticated && (
+              <LogoutButton>
+                {/* Add the Logout Button */}
+                Logout
+              </LogoutButton>
+            )}
           </Dropdown.Menu>
         </Dropdown>
 

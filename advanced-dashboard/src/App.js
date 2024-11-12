@@ -11,26 +11,39 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
+import { useAuth } from "./context/AuthContext";
+import User from "./components/User"; // Import the UserProfile component
+// import React from "react";
+import UserList from "../src/components/UserList";
+import CreateUser from "../src/components/CreateUser";
+import UpdateUser from "../src/components/UpdateUser";
+import DeleteUser from "./components/DeleteUser";
 
 function App() {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <AppProviders>
       <Router>
         <ErrorBoundary>
           <Routes>
-            {/* Login Route with Redirect if Authenticated */}
-            <Route path="/login" element={<Login />} />
-            {/* Protected Dashboard Route */}
-            <Route
-              path="/dashboard/*"
-              element={
-                <PrivateRoute>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-            />
-            {/* Fallback Route for Undefined Paths */}
-            <Route path="*" element={<Navigate to="/login" />} />
+            {isAuthenticated ? (
+              <Route
+                path="/dashboard/*"
+                element={
+                  <PrivateRoute>
+                    <Dashboard />
+                  </PrivateRoute>
+                }
+              />
+            ) : (
+              <Route path="/login" element={<Login />} />
+            )}
+            <Route  path="*" element={ <Navigate to={isAuthenticated ? "/dashboard" : "/login"} /> }  />
           </Routes>
         </ErrorBoundary>
       </Router>

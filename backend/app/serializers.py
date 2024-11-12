@@ -2,11 +2,12 @@ from rest_framework import serializers
 from .models import User, Asset, Vendor, Category, AssetModel, Make, Department, Employee
 from django.contrib.auth.models import User
 
-class UserSerializer(serializers.ModelSerializer):
 
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name']  # Fields to include
+        fields = '__all__'  # or specify the fields you need
+        # fields = ['id', 'username', 'first_name', 'last_name', 'email']  # Add other fields as needed
 
 
 class AssetSerializer(serializers.ModelSerializer):

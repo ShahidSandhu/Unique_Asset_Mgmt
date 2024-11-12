@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 
 function PrivateRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
+  
   const location = useLocation();
 
   if (loading) {

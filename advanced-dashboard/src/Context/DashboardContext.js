@@ -6,14 +6,16 @@ import { toast } from "react-toastify";
 export const DashboardContext = createContext({
   assets: [],
   employees: [],
+  user: [],
   theme: "light",
   toggleTheme: () => {},
 });
 
 export function DashboardProvider({ children }) {
+  const [theme, setTheme] = useState("light");
   const [assets, setAssets] = useState([]);
   const [employees, setEmployees] = useState([]);
-  const [theme, setTheme] = useState("light");
+  const [users, setUsers] = useState([]);
 
   const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
 
@@ -26,8 +28,10 @@ export function DashboardProvider({ children }) {
       try {
         const assetsResponse = await api.get("/api/assets/");
         const employeesResponse = await api.get("/api/employees/");
+        const usersResponse = await api.get("/api/users/");
         setAssets(assetsResponse.data);
         setEmployees(employeesResponse.data);
+        setUsers(usersResponse.data);
         toast.success("Data fetched successfully!");
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -43,7 +47,7 @@ export function DashboardProvider({ children }) {
 
   return (
     <DashboardContext.Provider
-      value={{ assets, employees, theme, toggleTheme }}
+      value={{ assets, employees, users, theme, toggleTheme }}
     >
       {children}
     </DashboardContext.Provider>

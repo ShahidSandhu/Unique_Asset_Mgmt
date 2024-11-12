@@ -14,19 +14,99 @@ from .serializers import (
 # views.py
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-# from rest_framework.response import Response
+from rest_framework.response import Response
 from .serializers import UserSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from rest_framework.permissions import AllowAny  # Ensures public access to this endpoint
 from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
+from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenBackendError, TokenError
+from django.utils.translation import gettext_lazy as _
+from django.http import JsonResponse
+
 
 import logging
-logger = logging.getLogger('myapp')  # Matches the 'myapp' logger in settings
+
+logger = logging.getLogger(__name__)
+
+
+class TestView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request):
+        return Response({"message": "Server is working!"}, status=status.HTTP_200_OK)
+
+
+
+class TokenVerifyView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        logger.info("Received request for token verification")
+
+        # Get the access token from the request body
+        access_token = request.data.get('access')
+
+        # Validate that the access token is provided
+        if not access_token:
+            logger.error("Access token not provided.")
+            return Response({"detail": _("Access token not provided.")}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            logger.info("Verifying access token")
+            # Validate the access token
+            AccessToken(access_token)  # This will raise an error if invalid
+            logger.info("Access token is valid.")
+            return Response({"detail": _("Token is valid.")}, status=status.HTTP_200_OK)
+
+        except InvalidToken as e:
+            logger.error(f"Access token invalid or expired: {str(e)}")
+            return Response({"detail": _("Access token is invalid or expired.")}, status=status.HTTP_401_UNAUTHORIZED)
+
+        except TokenBackendError as e:
+            logger.error(f"Token signature verification failed: {str(e)}")
+            return Response({"detail": _("Token signature verification failed.")}, status=status.HTTP_401_UNAUTHORIZED)
+
+        except TokenError as e:
+            logger.error(f"Token error: {str(e)}")
+            return Response({"detail": _("Token error occurred.")}, status=status.HTTP_401_UNAUTHORIZED)
+
+        except Exception as e:
+            logger.error(f"Unexpected error during access token verification: {str(e)}")
+            return Response({"detail": _("Internal server error occurred while verifying the token.")},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class TokenRefreshView(APIView):
+    """
+    Custom view for refreshing JWT tokens using the provided refresh token.
+    """
+    permission_classes = [AllowAny]  # Allow any user, no authentication needed
+    def post(self, request, *args, **kwargs):
+        # Extract refresh token from request data
+        refresh_token = request.data.get("refresh", None)
+        
+        if not refresh_token:
+            return JsonResponse({"detail": "Refresh token is required."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            # Create a refresh token object from the provided refresh token string
+            token = RefreshToken(refresh_token)
+            
+            # Generate the new access token
+            new_access_token = str(token.access_token)
+            
+            return JsonResponse({"access": new_access_token}, status=status.HTTP_200_OK)
+        
+        except TokenError as e:
+            # Handle invalid token error
+            raise InvalidToken(e.args[0])
+
 
 class UserLoginView(APIView):
     permission_classes = [AllowAny]
@@ -76,14 +156,17 @@ class UserLoginView(APIView):
 
         # Return tokens and user details
         return Response({
-            "refreshToken": str(refresh),
-            "accessToken": str(refresh.access_token),
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
             "user": {
                 "id": user.id,
+                "username": user.username,
+                "email": user.email,
                 "name": f"{user.first_name} {user.last_name}",
                 "roles": roles,
             }
         }, status=status.HTTP_200_OK)
+
 
 
 class ValidateTokenView(APIView):
@@ -108,13 +191,19 @@ class ValidateTokenView(APIView):
         # return response
 
 
-class UserProfileView(APIView):
+class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # Optional: Add authentication and permissions
 
-    def get_object(self):
-        return self.request.user
+    def get_queryset(self):
+        return User.objects.all()
+    
+    @action(detail=True, methods=['post'])
+    def reset_password(self, request, pk=None):
+        user = self.get_object()
+        # Implement password reset logic here
+        return Response({'status': 'password reset'})
 
 
 class AssetViewSet(viewsets.ModelViewSet):

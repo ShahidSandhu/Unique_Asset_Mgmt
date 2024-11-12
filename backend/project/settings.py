@@ -26,9 +26,11 @@ SECRET_KEY = 'django-insecure-s(nbyrkqs0t)p5=%-#1=ozkl&!f0nd!rw$49$n*6fybegnd!k^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1'] # React app URL]
 
 APPEND_SLASH = False
+
+CORS_ALLOW_ALL_ORIGINS = True  # Allow all origins (use this in development only)
 
 # Application definition
 
@@ -128,18 +130,13 @@ REST_FRAMEWORK = {
 }
 
 
-
-
-# REST_FRAMEWORK = {
-    # 'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
-    # ),
-# }
-
+# JWT settings
+from datetime import timedelta
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'AUTH_HEADER_TYPES': ('Bearer',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # Access token expiration time
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # Refresh token expiration time
+    'ROTATE_REFRESH_TOKENS': False,  # Optionally, set to True if you want to rotate refresh tokens
+    'BLACKLIST_AFTER_ROTATION': True,  # Optionally, blacklist refresh tokens after use
 }
 
 # Password validation

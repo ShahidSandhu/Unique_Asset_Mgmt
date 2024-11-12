@@ -2,7 +2,14 @@
 import React, { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { DashboardContext } from "../context/DashboardContext";
-import { FaHome, FaDatabase, FaUsers, FaMoon, FaSun } from "react-icons/fa"; // Icons for sidebar items
+import {
+  FaHome,
+  FaDatabase,
+  FaUsers,
+  FaMoon,
+  FaSun,
+  FaUserCircle,
+} from "react-icons/fa"; // Add profile icon
 import "./Sidebar.css";
 
 function Sidebar() {
@@ -13,17 +20,41 @@ function Sidebar() {
     <div className="sidebar">
       <h2 className="sidebar-title">Actions</h2>
       <nav className="sidebar-links">
-        <Link to="home" className="sidebar-link">
+        <Link
+          to="home"
+          className={`sidebar-link ${
+            location.pathname.includes("home") ? "active" : ""
+          }`}
+        >
           <FaHome className="icon" />
           Home
         </Link>
-        <Link to="assets" className="sidebar-link">
+        <Link
+          to="assets"
+          className={`sidebar-link ${
+            location.pathname.includes("assets") ? "active" : ""
+          }`}
+        >
           <FaDatabase className="icon" />
           Assets
         </Link>
-        <Link to="employees" className="sidebar-link">
+        <Link
+          to="employees"
+          className={`sidebar-link ${
+            location.pathname.includes("employees") ? "active" : ""
+          }`}
+        >
           <FaUsers className="icon" />
-          Assets
+          Employee
+        </Link>
+        <Link
+          to="user"
+          className={`sidebar-link ${
+            location.pathname.includes("user") ? "active" : ""
+          }`}
+        >
+          <FaUserCircle className="icon" />
+          User
         </Link>
       </nav>
       <div className="sidebar-footer">
