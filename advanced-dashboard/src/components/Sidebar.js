@@ -65,6 +65,15 @@ function Sidebar() {
           <FaUserCircle className="icon" />
           TestScroll
         </Link>
+        <Link
+          to="TestPage"
+          className={`sidebar-link ${
+            location.pathname.includes("TestPage") ? "active" : ""
+          }`}
+        >
+          <FaUserCircle className="icon" />
+          TestPage
+        </Link>
       </nav>
       <div className="sidebar-footer">
         <button onClick={toggleTheme} className="theme-toggle-button">

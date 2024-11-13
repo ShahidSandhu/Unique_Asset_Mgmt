@@ -1,64 +1,73 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import LoadingSpinner from "./LoadingSpinner";
 import "./Login.css"; // Import custom styling
 
 function Login() {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
-  const { login, isAuthenticated, loading, error } = useAuth();
+  const [loading, setLoading] = useState("");
+  const { login, isAuthenticated, error } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isAuthenticated) {
+      console.log("Navigating to the dashboard");
       navigate("/dashboard/home");
     }
-  }, [isAuthenticated, navigate]);
+  }, []);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // setLoading(true);
     await login(identifier, password);
-    navigate("/dashboard/home");
+    // setLoading(false);
+    if (isAuthenticated) {
+      console.log("Navigating to the dashboard");
+      navigate("/dashboard/home");
+    }
   };
 
   return (
     <div className="login-page">
-      {" "}
-      {/* Apply the scoped class */}
       <div className="login-container">
         <div className="login-card">
-          <h2>Login</h2>
-          {loading ? (
-            <div className="loading-spinner">Loading...</div>
+          {loading ? ( // Display the spinner when loading is true
+            <LoadingSpinner />
           ) : (
-            <form onSubmit={handleSubmit}>
+            <>
+              <h2>Login</h2>
               {error && <div className="error-message">{error}</div>}
-              <div className="input-group">
-                <label htmlFor="identifier">Identifier:</label>
-                <input
-                  type="text"
-                  id="identifier"
-                  name="identifier"
-                  value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
-                  placeholder="Enter your identifier"
-                />
-              </div>
-              <div className="input-group">
-                <label htmlFor="password">Password:</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                />
-              </div>
-              <button type="submit" className="login-button">
-                Login
-              </button>
-            </form>
+              <form onSubmit={handleSubmit}>
+                <div className="input-group">
+                  <label htmlFor="identifier">Identifier:</label>
+                  <input
+                    type="text"
+                    id="identifier"
+                    name="identifier"
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
+                    placeholder="Enter your identifier"
+                  />
+                </div>
+                <div className="input-group">
+                  <label htmlFor="password">Password:</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter your password"
+                  />
+                </div>
+                <button type="submit" className="login-button">
+                  Login
+                </button>
+              </form>
+            </>
           )}
         </div>
       </div>

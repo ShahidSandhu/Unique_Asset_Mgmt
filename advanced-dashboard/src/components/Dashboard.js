@@ -9,6 +9,7 @@ import Employees from "../pages/Employees";
 import Users from "./Users"; // Users component import
 import "./Dashboard.css";
 import TestScroll from '../components/TestScroll'; // Adjust path if needed
+import TestPage from "./TestPage";
 
 function Dashboard() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
@@ -30,8 +31,9 @@ function Dashboard() {
               <Route path="home" element={<Home />} />
               <Route path="assets" element={<Assets />} />
               <Route path="employees" element={<Employees />} />
-              <Route path="users" element={<Users />} />{" "}
-              <Route path="testscroll" element={<TestScroll />} />{" "}
+              <Route path="users" element={<Users />} />
+              <Route path="testscroll" element={<TestScroll />} />
+              <Route path="testpage" element={<TestPage />} />{" "}
               {/* Correct route for Users */}
             </Routes>
             <Outlet /> {/* Renders nested routes */}

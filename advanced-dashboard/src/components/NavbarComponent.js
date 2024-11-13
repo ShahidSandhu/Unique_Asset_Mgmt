@@ -5,15 +5,20 @@ import { FiMenu } from "react-icons/fi";
 import "./Navbar.css";
 import { DashboardContext } from "../context/DashboardContext"; // Import the context
 import { useAuth } from "../context/AuthContext";
-import LogoutButton from "./LogoutButton";
-import User from "./Users";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function NavbarComponent({ toggleSidebar }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const dashboardContext = useContext(DashboardContext);
   const theme = dashboardContext?.theme || "light";
   const toggleTheme = dashboardContext?.toggleTheme || (() => {});
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout(); // Call the logout function
+    navigate("/login");
+  };
+
 
   return (
     <Navbar
@@ -53,10 +58,7 @@ function NavbarComponent({ toggleSidebar }) {
             <Dropdown.Item href="/settings">Settings</Dropdown.Item>
             {/* {isAuthenticated && <button onClick={logout}>Logout</button>} */}
             {isAuthenticated && (
-              <LogoutButton>
-                {/* Add the Logout Button */}
-                Logout
-              </LogoutButton>
+              <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
             )}
           </Dropdown.Menu>
         </Dropdown>

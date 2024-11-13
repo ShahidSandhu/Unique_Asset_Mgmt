@@ -12,6 +12,8 @@ import PrivateRoute from "./components/PrivateRoute";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import { useAuth } from "./context/AuthContext";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 // import React from "react";
 
 function App() {
