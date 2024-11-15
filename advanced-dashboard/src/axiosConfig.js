@@ -42,26 +42,7 @@ api.interceptors.response.use(
 );*/
 
 
-// Function to refresh the access token
-const refreshAccessToken = async () => {
-  const refresh = localStorage.getItem("refresh"); 
-  // Retrieve refresh token from local storage
-  if (!refresh) return null;
-
-  try {
-    const response = await api.post("/api/token/refresh/", {
-      refresh: refresh,
-    });
-    const newAccessToken = response.data.access;
-    // Store the new access token
-    localStorage.setItem("access", newAccessToken);
-    return newAccessToken; // Return the new access token
-  } catch (error) {
-    console.error("Failed to refresh token:", error);
-    localStorage.removeItem("access"); // Clear tokens on error
-    localStorage.removeItem("refresh");
-    throw error; // Rethrow the error for further handling
-  }
-};
+// Set a default timeout of 5 seconds (5000 milliseconds)
+api.defaults.timeout = 5000;
 
 export default api;

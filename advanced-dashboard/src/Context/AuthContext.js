@@ -1,8 +1,23 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useReducer, useEffect } from "react";
 import axios from "axios";
 import api from "../axiosConfig";
 
 const AuthContext = createContext(null);
+
+function authReducer(state, action) {
+  switch (action.type) {
+    case "SET_USER":
+      return { ...state, user: action.payload, isAuthenticated: true };
+    case "LOGOUT":
+      return { ...state, user: null, isAuthenticated: false };
+    case "SET_LOADING":
+      return { ...state, loading: action.payload };
+    case "SET_ERROR":
+      return { ...state, error: action.payload };
+    default:
+      return state;
+  }
+}
 
 export function useAuth() {
   const context = useContext(AuthContext);
@@ -13,48 +28,30 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(() => {
-    try {
-      const storedUser = localStorage.getItem("user");
-      return storedUser ? JSON.parse(storedUser) : null;
-    } catch (error) {
-      console.error("Error parsing stored user data:", error);
-      localStorage.removeItem("user");
-      localStorage.removeItem("access");
-      localStorage.removeItem("refresh");
-      return null;
-    }
+  const [state, dispatch] = useReducer(authReducer, {
+    user: JSON.parse(localStorage.getItem("user")) || null,
+    isAuthenticated: Boolean(localStorage.getItem("access")),
+    loading: false,
+    error: null,
   });
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    localStorage.getItem("access")
-  );
-  const [error, setError] = useState(null);
 
   const setAuthData = (userData, accessToken, refreshToken) => {
     if (userData && accessToken) {
-      setUser(userData);
-      if (!isAuthenticated) {
-        setIsAuthenticated(true);
-      }
+      dispatch({ type: "SET_USER", payload: userData });
       localStorage.setItem("access", accessToken);
       localStorage.setItem("refresh", refreshToken);
-      localStorage.setItem("user", JSON.stringify(userData)); // Ensure user is stringified
-    } else {
-      console.error("Invalid user or access token data");
+      localStorage.setItem("user", JSON.stringify(userData));
     }
   };
 
   const logout = () => {
-    setIsAuthenticated(false);
-    setUser(null);
+    dispatch({ type: "LOGOUT" });
     localStorage.clear();
-    
   };
-  
+
   const login = async (identifier, password) => {
-    setLoading(true);
-    setError(null);
+    dispatch({ type: "SET_LOADING", payload: true });
+    dispatch({ type: "SET_ERROR", payload: null });
     try {
       const response = await axios.post("http://localhost:8000/api/login/", {
         identifier,
@@ -62,20 +59,15 @@ export function AuthProvider({ children }) {
       });
       const { user, access, refresh } = response.data;
       setAuthData(user, access, refresh);
-      setIsAuthenticated(true);
-      // localStorage.setItem("refresh", refresh);
-      // setIsAuthenticated(true); // Ensure this doesn't trigger re-renders unexpectedly.
-      // setLoading(false);
     } catch (error) {
-      // setLoading(false);
-      setError("Invalid credentials. Please try again.");
-      // logout(); // This should be controlled to avoid re-triggering the effect.
+      dispatch({
+        type: "SET_ERROR",
+        payload: "Invalid credentials. Please try again.",
+      });
     } finally {
-      setLoading(false); // Ensure this runs after everything is handled.
+      dispatch({ type: "SET_LOADING", payload: false });
     }
-
   };
-
 
   const verifyToken = async (accessToken) => {
     try {
@@ -84,7 +76,10 @@ export function AuthProvider({ children }) {
       });
       return response.status === 200;
     } catch (error) {
-      console.error("Token verification failed:", error.response || error);
+      console.error(
+        "Token verification failed:",
+        error.response ? error.response.data : error.message
+      );
       return false;
     }
   };
@@ -99,25 +94,28 @@ export function AuthProvider({ children }) {
         localStorage.setItem("access", newAccessToken);
         return newAccessToken;
       } else {
+        console.warn("Unexpected response status:", response.status);
         return null;
       }
     } catch (error) {
-      console.error("Token refresh failed:", error.response || error);
+      console.error(
+        "Token refresh failed:",
+        error.response ? error.response.data : error.message
+      );
       return null;
     }
   };
 
+
   useEffect(() => {
     const initializeAuth = async () => {
-      setLoading(true); // Ensure loading state is set
+      dispatch({ type: "SET_LOADING", payload: true });
       const accessToken = localStorage.getItem("access");
       const refreshTokenValue = localStorage.getItem("refresh");
 
       try {
         const storedUser = JSON.parse(localStorage.getItem("user"));
-        if (!storedUser) {
-          throw new Error("Invalid user data");
-        }
+        if (!storedUser) throw new Error("Invalid user data");
 
         if (accessToken) {
           const isValid = await verifyToken(accessToken);
@@ -138,21 +136,17 @@ export function AuthProvider({ children }) {
         }
       } catch (error) {
         console.error("Initialization error:", error);
-        // localStorage.removeItem("user"); // More selective cleanup
         logout();
       } finally {
-        setLoading(false); // Ensure loading is stopped
+        dispatch({ type: "SET_LOADING", payload: false });
       }
     };
 
     initializeAuth();
   }, []);
 
-
   return (
-    <AuthContext.Provider
-      value={{ user, isAuthenticated, login, logout, error, loading }}
-    >
+    <AuthContext.Provider value={{ ...state, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

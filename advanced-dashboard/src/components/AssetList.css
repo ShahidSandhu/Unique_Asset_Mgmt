@@ -1,0 +1,142 @@
+/* Styles for the Asset List Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+button {
+  padding: 5px 10px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #f0f0f0;
+}
+
+a {
+  text-decoration: none;
+}
+
+a button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+}
+
+a button:hover {
+  background-color: #0056b3;
+}
+
+button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+}
+
+button:hover {
+  background-color: #c82333;
+}
+
+
+/* AssetList.css */
+
+/* Basic styling for the page */
+div {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+/* Search Bar */
+.search-bar {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.search-bar input {
+  padding: 8px;
+  font-size: 16px;
+  width: 300px;
+  margin-right: 10px;
+}
+
+/* Table styling */
+.asset-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.asset-table th,
+.asset-table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.asset-table th {
+  background-color: #f4f4f4;
+  cursor: pointer;
+}
+
+.asset-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.asset-table button {
+  padding: 8px 12px;
+  margin: 5px;
+  cursor: pointer;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+}
+
+.asset-table button:hover {
+  background-color: #0056b3;
+}
+
+/* Pagination Styling */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 8px 15px;
+  margin: 5px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-size: 16px;
+  margin: 0 10px;
+}
+
+.pagination button:hover {
+  background-color: #0056b3;
+}
+
