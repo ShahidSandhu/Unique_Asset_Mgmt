@@ -1,180 +1,199 @@
-import React, { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import React, { useState, useEffect } from "react";
 import api from "../axiosConfig";
-import "./AssetList.css";
 
-const AssetForm = ({ assetId, onSave, initialAsset }) => {
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm();
-  const [departments, setDepartments] = useState([]);
-  const [employees, setEmployees] = useState([]);
-  const [loading, setLoading] = useState(false);
+const AssetForm = ({
+  asset,
+  onSave,
+  employees,
+  departments,
+  vendors,
+  categories,
+}) => {
+  const [formData, setFormData] = useState({
+    name: asset ? asset.name : "",
+    description: asset ? asset.description : "",
+    value: asset ? asset.value : "",
+    serialNumber: asset ? asset.serialNumber : "",
+    barcode: asset ? asset.barcode : "",
+    purchaseDate: asset ? asset.purchaseDate : "",
+    dateDisposed: asset ? asset.dateDisposed : "",
+    condition: asset ? asset.condition : "Good",
+    assignedTo: asset ? asset.assignedTo : "",
+    department: asset ? asset.department : "",
+    vendor: asset ? asset.vendor : "",
+    category: asset ? asset.category : "",
+  });
 
   useEffect(() => {
-    setLoading(true);
-
-    // Fetch departments and employees for select fields
-    Promise.all([api.get("/api/departments/"), api.get("/api/employees/")])
-      .then(([deptResponse, empResponse]) => {
-        setDepartments(deptResponse.data);
-        setEmployees(empResponse.data);
-
-        if (assetId && initialAsset) {
-          setValue("name", initialAsset.name);
-          setValue("description", initialAsset.description);
-          setValue("value", initialAsset.value);
-          setValue("serial_number", initialAsset.serial_number);
-          setValue("barcode", initialAsset.barcode);
-          setValue("date_acquired", initialAsset.date_acquired);
-          setValue("date_disposed", initialAsset.date_disposed);
-          setValue("department", initialAsset.department.id);
-          setValue("assigned_to", initialAsset.assigned_to?.id || null);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching departments or employees:", error);
-      })
-      .finally(() => {
-        setLoading(false);
+    if (asset) {
+      setFormData({
+        id: asset.id || "",
+        name: asset.name || "",
+        description: asset.description || "",
+        type: asset.type || "",
+        status: asset.status || "",
+        purchaseDate: asset.purchaseDate || "",
+        value: asset.value || "",
+        location: asset.location || "",
+        assignedTo: asset.assigned_to ? asset.assigned_to.id : "", // Ensure 'assignedTo' is populated with the correct employee ID
+        condition: asset.condition || "",
+        manufacturer: asset.manufacturer || "",
+        model: asset.model || "",
+        serialNumber: asset.serialNumber || "",
+        warrantyExpiration: asset.warrantyExpiration || "",
       });
-  }, [assetId, setValue, initialAsset]);
+    }
+  }, [asset]);
 
-  const onSubmit = (data) => {
-    setLoading(true);
-    const apiMethod = assetId ? api.put : api.post;
-    const apiUrl = assetId ? `/api/assets/${assetId}` : "/api/assets/";
-
-    apiMethod(apiUrl, data)
-      .then((response) => {
-        onSave(response.data); // Notify parent component after saving
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error saving asset:", error);
-        setLoading(false);
-      });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  if (loading) return <div>Loading...</div>;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave(formData);
+  };
+
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit}>
       <div>
-        <label>Name</label>
-        <Controller
+        <label>Name:</label>
+        <input
+          type="text"
           name="name"
-          control={control}
-          rules={{ required: "Name is required" }}
-          render={({ field }) => <input {...field} />}
+          value={formData.name}
+          onChange={handleChange}
+          required
         />
-        {errors.name && <p>{errors.name.message}</p>}
       </div>
-
       <div>
-        <label>Description</label>
-        <Controller
+        <label>Description:</label>
+        <textarea
           name="description"
-          control={control}
-          rules={{ required: "Description is required" }}
-          render={({ field }) => <textarea {...field} />}
+          value={formData.description}
+          onChange={handleChange}
         />
-        {errors.description && <p>{errors.description.message}</p>}
       </div>
-
       <div>
-        <label>Value</label>
-        <Controller
+        <label>Value:</label>
+        <input
+          type="number"
           name="value"
-          control={control}
-          rules={{ required: "Value is required" }}
-          render={({ field }) => <input type="number" step="0.01" {...field} />}
-        />
-        {errors.value && <p>{errors.value.message}</p>}
-      </div>
-
-      <div>
-        <label>Serial Number</label>
-        <Controller
-          name="serial_number"
-          control={control}
-          render={({ field }) => <input {...field} />}
+          value={formData.value}
+          onChange={handleChange}
+          required
         />
       </div>
-
       <div>
-        <label>Barcode</label>
-        <Controller
+        <label>Serial Number:</label>
+        <input
+          type="text"
+          name="serialNumber"
+          value={formData.serialNumber}
+          onChange={handleChange}
+        />
+      </div>
+      <div>
+        <label>Barcode:</label>
+        <input
+          type="text"
           name="barcode"
-          control={control}
-          render={({ field }) => <input {...field} />}
+          value={formData.barcode}
+          onChange={handleChange}
         />
       </div>
-
       <div>
-        <label>Date Acquired</label>
-        <Controller
-          name="date_acquired"
-          control={control}
-          render={({ field }) => <input type="date" {...field} />}
+        <label>Purchase Date:</label>
+        <input
+          type="date"
+          name="purchaseDate"
+          value={formData.purchaseDate}
+          onChange={handleChange}
         />
       </div>
-
       <div>
-        <label>Date Disposed</label>
-        <Controller
-          name="date_disposed"
-          control={control}
-          render={({ field }) => <input type="date" {...field} />}
+        <label>Date Disposed:</label>
+        <input
+          type="date"
+          name="dateDisposed"
+          value={formData.dateDisposed}
+          onChange={handleChange}
         />
       </div>
-
       <div>
-        <label>Department</label>
-        <Controller
+        <label>Condition:</label>
+        <select
+          name="condition"
+          value={formData.condition}
+          onChange={handleChange}
+        >
+          <option value="Good">Good</option>
+          <option value="Fair">Fair</option>
+          <option value="Poor">Poor</option>
+        </select>
+      </div>
+      <div>
+        <label>Assigned To:</label>
+        <select
+          name="assignedTo"
+          value={formData.assignedTo}
+          onChange={handleChange}
+        >
+          <option value="">Select Employee</option>
+          {employees?.map((employee) => (
+            <option key={employee.id} value={employee.id}>
+              {employee.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label>Department:</label>
+        <select
           name="department"
-          control={control}
-          rules={{ required: "Department is required" }}
-          render={({ field }) => (
-            <select {...field}>
-              <option value="">Select a department</option>
-              {departments.map((dept) => (
-                <option key={dept.id} value={dept.id}>
-                  {dept.name}
-                </option>
-              ))}
-            </select>
-          )}
-        />
-        {errors.department && <p>{errors.department.message}</p>}
+          value={formData.department}
+          onChange={handleChange}
+        >
+          <option value="">Select Department</option>
+          {departments?.map((department) => (
+            <option key={department.id} value={department.id}>
+              {department.name}
+            </option>
+          ))}
+        </select>
       </div>
-
       <div>
-        <label>Assigned To</label>
-        <Controller
-          name="assigned_to"
-          control={control}
-          render={({ field }) => (
-            <select {...field}>
-              <option value="">Select an employee</option>
-              {employees.map((employee) => (
-                <option key={employee.id} value={employee.id}>
-                  {employee.name}
-                </option>
-              ))}
-            </select>
-          )}
-        />
+        <label>Vendor:</label>
+        <select name="vendor" value={formData.vendor} onChange={handleChange}>
+          <option value="">Select Vendor</option>
+          {vendors?.map((vendor) => (
+            <option key={vendor.id} value={vendor.id}>
+              {vendor.name}
+            </option>
+          ))}
+        </select>
       </div>
-
       <div>
-        <button type="submit">Save</button>
+        <label>Category:</label>
+        <select
+          name="category"
+          value={formData.category}
+          onChange={handleChange}
+        >
+          <option value="">Select Category</option>
+          {categories?.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
       </div>
+      <button type="submit">Submit</button>
     </form>
   );
+
 };
 
 export default AssetForm;
