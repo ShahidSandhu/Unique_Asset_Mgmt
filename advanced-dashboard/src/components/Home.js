@@ -1,4 +1,4 @@
-// src/components/DashboardHome.js
+// src/components/Home.js
 import React from "react";
 import DataCard from "./DataCard";
 import ChartCard from "./ChartCard"; // Assume this component renders a chart
