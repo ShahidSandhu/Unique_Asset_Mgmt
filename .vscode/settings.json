@@ -1,3 +1,51 @@
 {
-    "git.ignoreLimitWarning": true
+  // General settings for VSCode
+  "git.ignoreLimitWarning": true,
+  "workbench.settings.openDefaultSettings": true,
+  "editor.fontFamily": "Fira Code, Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontSize": 14,
+  "editor.lineHeight": 22,
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "boundary",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "files.autoSave": "onFocusChange",
+  "workbench.colorTheme": "ChatGPT Theme",
+  "workbench.iconTheme": "vscode-icons",
+  "breadcrumbs.enabled": true,
+  "window.zoomLevel": 0,
+  "explorer.compactFolders": false,
+
+  // Python specific settings for Django
+  "python.pythonPath": "venv/bin/python",
+  "python.formatting.provider": "black",
+  "python.linting.enabled": true,
+  "python.linting.flake8Enabled": true,
+  "python.linting.flake8Args": ["--max-line-length=88"],
+  "python.linting.pylintEnabled": false,
+  "python.linting.pylintArgs": ["--disable=missing-docstring"],
+
+  // JavaScript/React specific settings
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.formatOnSave": true
+  },
+  "[javascriptreact]": {
+    "editor.formatOnSave": true
+  },
+
+  // cSpell settings
+  "cSpell.ignoreRegExpList": ["/python.linting.pylintArgs/"],
+
+  // Latex Workshop settings
+  "latex-workshop.intellisense.biblatexJSON.replace": {}
 }

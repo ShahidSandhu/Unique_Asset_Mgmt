@@ -1,3 +1,7 @@
+# cSpell: disable
+# pylint: disable=missing-docstring,unused-import, unused-variable, invalid-name,too-few-public-methods
+# pylint: disable=too-many-arguments,logging-fstring-interpolation
+
 import uuid
 from django.db import models
 from django.contrib.auth.models import User
@@ -200,7 +204,6 @@ class Employee(models.Model):
     department = models.ForeignKey(
         Department, on_delete=models.SET_NULL, related_name="employees", null=True, blank=True
     )
-    
 
     def __str__(self):
         return self.name

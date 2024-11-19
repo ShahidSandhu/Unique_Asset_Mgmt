@@ -1,4 +1,8 @@
+# cSpell: disable
+# pylint: disable=missing-docstring,unused-import, unused-variable, invalid-name,too-few-public-methods
+# pylint: disable=missing-docstring,unused-import,too-many-arguments,logging-fstring-interpolation
 
+import logging
 from rest_framework import viewsets
 from .models import Asset, Vendor, Category, AssetModel, Make, Department, Employee
 from .serializers import (
@@ -30,17 +34,14 @@ from rest_framework_simplejwt.exceptions import InvalidToken, TokenBackendError,
 from django.utils.translation import gettext_lazy as _
 from django.http import JsonResponse
 
-
-import logging
-
 logger = logging.getLogger(__name__)
 
 
 class TestView(APIView):
     permission_classes = [AllowAny]
+
     def get(self, request):
         return Response({"message": "Server is working!"}, status=status.HTTP_200_OK)
-
 
 
 class TokenVerifyView(APIView):
@@ -87,6 +88,7 @@ class TokenRefreshView(APIView):
     Custom view for refreshing JWT tokens using the provided refresh token.
     """
     permission_classes = [AllowAny]  # Allow any user, no authentication needed
+
     def post(self, request, *args, **kwargs):
         # Extract refresh token from request data
         refresh_token = request.data.get("refresh", None)
@@ -168,14 +170,12 @@ class UserLoginView(APIView):
         }, status=status.HTTP_200_OK)
 
 
-
 class ValidateTokenView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         # If the user is authenticated, the token is valid
         return Response({"detail": "Token is valid"}, status=200)
-    
    
 # class CustomTokenObtainPairView(TokenObtainPairView):
 

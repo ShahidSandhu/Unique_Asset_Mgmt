@@ -1,4 +1,9 @@
+# cSpell: disable
+# pylint: disable=missing-docstring,unused-import, unused-variable, invalid-name,too-few-public-methods
+# pylint: disable=missing-docstring,unused-import,too-many-arguments,logging-fstring-interpolation
+
 # app/admin.py
+
 from django.contrib import admin
 from .models import Asset, Vendor, Category, AssetModel, Make, Department, Employee
 

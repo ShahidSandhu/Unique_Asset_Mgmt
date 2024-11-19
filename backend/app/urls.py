@@ -1,3 +1,7 @@
+# cSpell: disable
+# pylint: disable=missing-docstring,unused-import, unused-variable, invalid-name,too-few-public-methods
+# pylint: disable=missing-docstring,unused-import,too-many-arguments
+
 from django.contrib.auth.models import User
 from django.contrib import admin
 from django.urls import path, include
